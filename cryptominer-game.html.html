@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Miner</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(to bottom, #1e3c72, #2a5298);
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+        }
+        #counter {
+            font-size: 20px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        #gameArea {
+            width: 350px;
+            height: 350px;
+            background: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 6px solid #ffcc00;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.8);
+            position: relative;
+            cursor: pointer;
+            font-size: 50px;
+        }
+        .bitcoin {
+            position: absolute;
+            font-size: 28px;
+            animation: bounce 0.5s ease;
+        }
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+        #message {
+            font-size: 18px;
+            color: yellow;
+            margin-top: 10px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <script>
+        let playerName = "";
+        window.onload = function() {
+            playerName = prompt("Enter your name to start mining:");
+            while (!playerName) {
+                playerName = prompt("Please enter your name to begin:");
+            }
+            window.startTime = new Date();
+        };
+    </script>
+
+    <div id="counter">Coins: 0/50</div>
+    <div id="gameArea">🔨</div>
+    <div id="message"></div>
+    
+    <script>
+        let clicks = 0;
+        const maxClicks = 50;
+        const gameArea = document.getElementById("gameArea");
+        const counter = document.getElementById("counter");
+        const message = document.getElementById("message");
+
+        gameArea.addEventListener("click", function() {
+            if (clicks >= maxClicks) return;
+            
+            clicks++;
+            counter.innerText = `Coins: ${clicks}/${maxClicks}`;
+            
+            const bitcoin = document.createElement("div");
+            bitcoin.innerText = "🪙";
+            bitcoin.classList.add("bitcoin");
+            bitcoin.style.left = `${Math.random() * 80 + 10}%`;
+            bitcoin.style.top = `${Math.random() * 80 + 10}%`;
+            gameArea.appendChild(bitcoin);
+            
+            setTimeout(() => bitcoin.remove(), 800);
+            
+            if (clicks >= maxClicks) {
+                const endTime = new Date();
+                const timeSpent = ((endTime - window.startTime) / 1000).toFixed(2);
+                message.innerText = `wow, ${playerName}, you've wasted ${timeSpent} seconds playing this game but you atleast mined some bitcoins!`;
+                message.style.color = "red";
+                message.style.fontSize = "24px";
+                gameArea.style.cursor = "not-allowed";
+            }
+        });
+    </script>
+</body>
+</html>
